@@ -2,7 +2,7 @@
 ## Oh My Zsh Installation Script FOR Arch AND Debian based systems
 
 # Configuration
-PKG_MANAGER="apt" #apt or pacman
+PKG_MANAGER="pacman" #apt or pacman
 THEME="steeef"
 PLUGINS=("git" "z" "sudo" "extract" "history" "colored-man-pages" "zsh-autosuggestions" "zsh-syntax-highlighting")
 

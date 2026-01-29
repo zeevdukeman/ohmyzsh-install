@@ -1,10 +1,27 @@
 #!/bin/bash
 ## Oh My Zsh Installation Script FOR Arch AND Debian based systems
 
+## one line install:
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/zeevdukeman/ohmyzsh-install/main/install.sh)"
+
 # Configuration
-PKG_MANAGER="apt" #apt or pacman
-THEME="steeef"
-PLUGINS=("git" "z" "sudo" "extract" "history" "colored-man-pages" "zsh-autosuggestions" "zsh-syntax-highlighting")
+local PKG_MANAGER="apt" #apt or pacman
+local THEME="steeef"
+local PLUGINS=("git" "z" "sudo" "extract" "history" "colored-man-pages" "zsh-autosuggestions" "zsh-syntax-highlighting")
+
+set_config() {
+    read -p "Enter package manager (apt/pacman) [default: apt]: " input_pkg_manager
+    PKG_MANAGER=${input_pkg_manager:-$PKG_MANAGER}
+
+    read -p "Enter Oh My Zsh theme [default: $THEME]: " input_theme
+    THEME=${input_theme:-$THEME}
+
+    echo "Enter plugins to install (space-separated) [default: ${PLUGINS[*]}]: "
+    read -a input_plugins
+    if [ ${#input_plugins[@]} -ne 0 ]; then
+        PLUGINS=("${input_plugins[@]}")
+    fi
+}
 
 install_dependencies() {
     if [ "$PKG_MANAGER" = "apt" ]; then
@@ -79,4 +96,5 @@ run_installation() {
 }
 
 check_root
+set_config
 run_installation

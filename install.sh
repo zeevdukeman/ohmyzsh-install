@@ -3,6 +3,17 @@
 
 ## one line install:
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/zeevdukeman/ohmyzsh-install/main/install.sh)"
+
+# if $ZSH exist, ask user if they want to unset it first
+if [ -n "$ZSH" ]; then
+    read -p "ZSH environment variable is set to '$ZSH'. Do you want to unset it? (y/n) " yn
+    case $yn in
+        [Yy]* ) unset ZSH; echo "ZSH variable unset.";;
+        [Nn]* ) echo "Continuing with existing ZSH variable.";;
+        * ) echo "Please answer yes or no."; exit 1;;
+    esac
+fi
+
 PKG_MANAGER=""
 THEME=""
 PLUGINS=()

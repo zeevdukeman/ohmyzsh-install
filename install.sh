@@ -12,12 +12,24 @@ set_defaults() {
     THEME="steeef"
     PLUGINS=("git" "z" "sudo" "extract" "history" "colored-man-pages" "zsh-autosuggestions" "zsh-syntax-highlighting")
 }
+
+check_which_pkg_manager() {
+    if command -v apt &> /dev/null; then
+        PKG_MANAGER="apt"
+    elif command -v pacman &> /dev/null; then
+        PKG_MANAGER="pacman"
+    else
+        echo "No supported package manager found (apt or pacman). Exiting."
+        exit 1
+    fi
+}
 # Configuration
 set_defaults
+check_which_pkg_manager
 
 set_config() {
-    read -p "Enter package manager (apt/pacman) [default: apt]: " input_pkg_manager
-    PKG_MANAGER=${input_pkg_manager:-$PKG_MANAGER}
+    # read -p "Enter package manager (apt/pacman) [default: apt]: " input_pkg_manager
+    # PKG_MANAGER=${input_pkg_manager:-$PKG_MANAGER}
 
     read -p "Enter Oh My Zsh theme [default: $THEME]: " input_theme
     THEME=${input_theme:-$THEME}

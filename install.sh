@@ -8,7 +8,6 @@ THEME=""
 PLUGINS=()
 
 set_defaults() {
-    PKG_MANAGER="apt" #apt, pacman, or dnf
     THEME="steeef"
     PLUGINS=("git" "z" "sudo" "extract" "history" "colored-man-pages" "zsh-autosuggestions" "zsh-syntax-highlighting")
 }

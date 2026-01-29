@@ -1,5 +1,5 @@
 #!/bin/bash
-## Oh My Zsh Installation Script FOR Arch AND Debian based systems
+## Oh My Zsh Installation Script FOR Arch, Debian, and Fedora based systems
 
 ## one line install:
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/zeevdukeman/ohmyzsh-install/main/install.sh)"
@@ -8,7 +8,7 @@ THEME=""
 PLUGINS=()
 
 set_defaults() {
-    PKG_MANAGER="apt" #apt or pacman
+    PKG_MANAGER="apt" #apt, pacman, or dnf
     THEME="steeef"
     PLUGINS=("git" "z" "sudo" "extract" "history" "colored-man-pages" "zsh-autosuggestions" "zsh-syntax-highlighting")
 }
@@ -18,8 +18,10 @@ check_which_pkg_manager() {
         PKG_MANAGER="apt"
     elif command -v pacman &> /dev/null; then
         PKG_MANAGER="pacman"
+    elif command -v dnf &> /dev/null; then
+        PKG_MANAGER="dnf"
     else
-        echo "No supported package manager found (apt or pacman). Exiting."
+        echo "No supported package manager found (apt, pacman, or dnf). Exiting."
         exit 1
     fi
 }
@@ -47,6 +49,8 @@ install_dependencies() {
         sudo apt install -y zsh curl git
     elif [ "$PKG_MANAGER" = "pacman" ]; then
         sudo pacman -Sy --noconfirm zsh curl git
+    elif [ "$PKG_MANAGER" = "dnf" ]; then
+        sudo dnf install -y zsh curl git
     fi
 }
 
@@ -66,6 +70,7 @@ change_default_shell() {
         chsh -s "$(which zsh)"
     fi
 }
+
 configure_ohmyzsh() {
   ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 

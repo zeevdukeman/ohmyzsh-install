@@ -110,12 +110,7 @@ post_installation() {
 
   echo "To apply changes, please restart your terminal or run 'source ~/.zshrc'."
 }
-check_root() {
-  if [ "$EUID" -eq 0 ]; then
-    echo "Please do not run this script as root."
-    exit 1
-  fi
-}
+
 run_installation() {
   echo "Starting installation..."
   install_dependencies
@@ -128,6 +123,5 @@ run_installation() {
   exit 0
 }
 
-check_root
 set_config
 run_installation

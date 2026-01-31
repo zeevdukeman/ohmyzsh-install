@@ -103,7 +103,7 @@ contain() {
   local setting="$1"
   local value="$2"
   local target="$3"
-  local should_export=${4:-false}
+  local should_export=${4:-true}
   if ! grep -q "^$setting=" "$target"; then
     if [ "$should_export" = true ]; then
       echo "export $setting=\"$value\"" >> "$target"
@@ -123,13 +123,12 @@ configure_ohmyzsh() {
   plugins=(git z sudo extract history colored-man-pages zsh-autosuggestions zsh-syntax-highlighting)
 
   source $ZSH/oh-my-zsh.sh
-
-
+  
   ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
-  contain "ZSH" "$ZSH" "$ZSHRC" "true"
-  contain "ZSH_THEME" "$ZSH_THEME" "$ZSHRC" "true"
-  contain "EDITOR" "$EDITOR" "$ZSHRC" "true"
+  contain "ZSH" "$ZSH" "$ZSHRC"
+  contain "ZSH_THEME" "$ZSH_THEME" "$ZSHRC"
+  contain "EDITOR" "$EDITOR" "$ZSHRC"
   # Set theme
   # sed -i "s/^ZSH_THEME=.*/ZSH_THEME=\"$THEME\"/" "$HOME/.zshrc"
 

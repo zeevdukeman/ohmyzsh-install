@@ -23,18 +23,18 @@ set_defaults() {
     PLUGINS=("git" "z" "sudo" "extract" "history" "colored-man-pages" "zsh-autosuggestions" "zsh-syntax-highlighting")
 }
 
-check_which_pkg_manager() {
-    if command -v apt &> /dev/null; then
-        PKG_MANAGER="apt"
-    elif command -v pacman &> /dev/null; then
-        PKG_MANAGER="pacman"
-    elif command -v dnf &> /dev/null; then
-        PKG_MANAGER="dnf"
-    else
-        echo "No supported package manager found (apt, pacman, or dnf). Exiting."
-        exit 1
-    fi
-}
+# check_which_pkg_manager() {
+#     if command -v apt &> /dev/null; then
+#         PKG_MANAGER="apt"
+#     elif command -v pacman &> /dev/null; then
+#         PKG_MANAGER="pacman"
+#     elif command -v dnf &> /dev/null; then
+#         PKG_MANAGER="dnf"
+#     else
+#         echo "No supported package manager found (apt, pacman, or dnf). Exiting."
+#         exit 1
+#     fi
+# }
 # Configuration
 set_defaults
 check_which_pkg_manager
@@ -53,14 +53,29 @@ set_config() {
     fi
 }
 
-install_dependencies() {
-    if [ "$PKG_MANAGER" = "apt" ]; then
-        sudo apt update
-        sudo apt install -y zsh curl git
-    elif [ "$PKG_MANAGER" = "pacman" ]; then
-        sudo pacman -Sy --noconfirm zsh curl git
-    elif [ "$PKG_MANAGER" = "dnf" ]; then
-        sudo dnf install -y zsh curl git
+# install_dependencies() {
+#     if [ "$PKG_MANAGER" = "apt" ]; then
+#         sudo apt update
+#         sudo apt install -y zsh curl git
+#     elif [ "$PKG_MANAGER" = "pacman" ]; then
+#         sudo pacman -Sy --noconfirm zsh curl git
+#     elif [ "$PKG_MANAGER" = "dnf" ]; then
+#         sudo dnf install -y zsh curl git
+#     fi
+# }
+
+#
+check_dependencies() {
+    dependencies=(zsh curl git)
+    missing_deps=()
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            missing_deps+=("$dep")
+        fi
+    done
+    if [ ${#missing_deps[@]} -ne 0 ]; then
+        echo "The following dependencies are missing: ${missing_deps[*]}"
+        exit 1
     fi
 }
 
@@ -81,11 +96,47 @@ change_default_shell() {
     fi
 }
 
+
+# function to check if .zshrc contains those settings already and if not, add them
+
+contain() {
+  local setting="$1"
+  local value="$2"
+  local target="$3"
+  local should_export=${4:-false}
+  if ! grep -q "^$setting=" "$target"; then
+    if [ "$should_export" = true ]; then
+      echo "export $setting=\"$value\"" >> "$target"
+    else
+      echo "$setting=\"$value\"" >> "$target"
+    fi
+  fi
+}
+
+
 configure_ohmyzsh() {
+  ZSHRC="$HOME/.zshrc"
+  ZSH="$HOME/.oh-my-zsh"
+  ZSH_THEME="ohmyz"
+  EDITOR=fresh
+  
+  plugins=(git z sudo extract history colored-man-pages zsh-autosuggestions zsh-syntax-highlighting)
+
+  source $ZSH/oh-my-zsh.sh
+
+
   ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
+  contain "ZSH" "$ZSH" "$ZSHRC" "true"
+  contain "ZSH_THEME" "$ZSH_THEME" "$ZSHRC" "true"
+  contain "EDITOR" "$EDITOR" "$ZSHRC" "true"
   # Set theme
-  sed -i "s/^ZSH_THEME=.*/ZSH_THEME=\"$THEME\"/" "$HOME/.zshrc"
+  # sed -i "s/^ZSH_THEME=.*/ZSH_THEME=\"$THEME\"/" "$HOME/.zshrc"
+
+
+
+
+
 
   # Add plugins
   local plugins_line="plugins=(${PLUGINS[*]})"
@@ -114,7 +165,7 @@ post_installation() {
 
 run_installation() {
   echo "Starting installation..."
-  install_dependencies
+  check_dependencies
   change_default_shell
   install_ohmyzsh
   post_installation

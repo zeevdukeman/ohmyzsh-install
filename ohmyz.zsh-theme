@@ -92,18 +92,12 @@ function steeef_precmd {
 }
 add-zsh-hook precmd steeef_precmd
 
-function dynamic_prompt() {
-	
-}
-# check if CONTAINER_ID is set (indicating we're in a container)
+distrosign=$''
 if [ -n "$CONTAINER_ID" ]; then
-
+       distrosign="%{%F{196}%}(distrobox)${PR_RST}"
+fi
 PROMPT=$'
-%{$purple%}%n${PR_RST} at %{$orange%}$CONTAINER_ID (distrobox)${PR_RST} in %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)
-$ '
-else
-PROMPT=$'
-%{$purple%}%n${PR_RST} at %{$orange%}%m${PR_RST} in %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)
+%{$purple%}%n${PR_RST} at %{$orange%}%m${PR_RST} in %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info) ${distrosign}
 $ '
 fi
 

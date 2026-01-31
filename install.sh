@@ -104,8 +104,9 @@ configure_ohmyzsh() {
   fi
 }
 post_installation() {
+  cp ./ohmyz.zsh-theme ~/.oh-my-zsh/themes/ohmyz.zsh-theme
   configure_ohmyzsh
-
+  
   echo "Oh My Zsh has been configured with theme '$THEME' and plugins: ${PLUGINS[*]}"
 
   echo "To apply changes, please restart your terminal or run 'source ~/.zshrc'."

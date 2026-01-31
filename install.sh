@@ -19,7 +19,7 @@ THEME=""
 PLUGINS=()
 
 set_defaults() {
-    THEME="steeef"
+    THEME="omyz"
     PLUGINS=("git" "z" "sudo" "extract" "history" "colored-man-pages" "zsh-autosuggestions" "zsh-syntax-highlighting")
 }
 

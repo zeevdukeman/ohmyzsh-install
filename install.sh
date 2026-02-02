@@ -37,7 +37,7 @@ set_defaults() {
 # }
 # Configuration
 set_defaults
-check_which_pkg_manager
+#check_which_pkg_manager
 
 set_config() {
     # read -p "Enter package manager (apt/pacman) [default: apt]: " input_pkg_manager

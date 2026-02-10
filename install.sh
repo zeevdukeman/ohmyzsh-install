@@ -130,7 +130,7 @@ configure_ohmyzsh() {
   contain "ZSH_THEME" "$ZSH_THEME" "$ZSHRC"
   contain "EDITOR" "$EDITOR" "$ZSHRC"
   # Set theme
-  # sed -i "s/^ZSH_THEME=.*/ZSH_THEME=\"$THEME\"/" "$HOME/.zshrc"
+  sed -i "s/^ZSH_THEME=.*/ZSH_THEME=\"$THEME\"/" "$HOME/.zshrc"
 
 
 
